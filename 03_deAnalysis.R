@@ -55,11 +55,11 @@ dim(mData)
 ## delete sample section after testing
 hist(mData)
 mData.norm = mData
-set.seed(123)
-i = sample(1:nrow(mData.norm), 10, replace = F)
-dfData = data.frame(t(mData.norm[i,]))
+# set.seed(123)
+# i = sample(1:nrow(mData.norm), 100, replace = F)
+# dfData = data.frame(t(log(mData.norm[prots,]+0.5)))
 
-#dfData = data.frame(t(mData.norm))
+dfData = data.frame(t(log(mData.norm+0.5)))
 dfData = stack(dfData)
 dim(dfData)
 f = factor(dfSample$group1)
@@ -79,12 +79,12 @@ str(dfData)
 library(lme4)
 fit.lme1 = lmer(values ~ 1  + (1 | Coef) + (1 | Coef.adj1) + (1 | Coef.adj2), data=dfData)
 summary(fit.lme1)
-fit.lme2 = lmer(values ~ 1 + (1 | Coef) + (1 | Coef.adj1), data=dfData)
-summary(fit.lme2)
-fit.lme3 = lmer(values ~ 1 + (1 | Coef) + (1 | Coef.adj2), data=dfData)
-summary(fit.lme3)
-fit.lme4 = lmer(values ~ 1 + (1 | Coef), data=dfData)
-summary(fit.lme4)
+# fit.lme2 = lmer(values ~ 1 + (1 | Coef) + (1 | Coef.adj1), data=dfData)
+# summary(fit.lme2)
+# fit.lme3 = lmer(values ~ 1 + (1 | Coef) + (1 | Coef.adj2), data=dfData)
+# summary(fit.lme3)
+# fit.lme4 = lmer(values ~ 1 + (1 | Coef), data=dfData)
+# summary(fit.lme4)
 
 anova(fit.lme1, fit.lme2, fit.lme3, fit.lme4)
 
@@ -179,7 +179,7 @@ levels(d$fBatch)
 ## repeat this for each comparison
 
 ## get a p-value for each comparison
-l = tapply(d$cols, d$split, FUN = function(x, base='Control', deflection='Paraplegic') {
+l = tapply(d$cols, d$split, FUN = function(x, base='Recovered', deflection='Paraplegic') {
   c = x
   names(c) = as.character(d$fBatch[c])
   dif = getDifference(ivData = mCoef[,c[deflection]], ivBaseline = mCoef[,c[base]])
